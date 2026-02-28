@@ -111,7 +111,8 @@ export default function Home() {
                 <Button
                   onClick={() => handleSetEndpoint(apiEndpoint)}
                   disabled={!apiEndpoint}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                  variant="outline"
+                  className="w-full border-border/50"
                   size="lg"
                 >
                   Connect API

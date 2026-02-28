@@ -81,7 +81,8 @@ export default function IdentityForm({ onSubmit, loading }: IdentityFormProps) {
           <Button
             type="submit"
             disabled={loading || (!email && !phoneNumber)}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11 font-medium"
+            variant="outline"
+            className="w-full border-border/50 h-11 font-medium"
             size="lg"
           >
             {loading ? (
