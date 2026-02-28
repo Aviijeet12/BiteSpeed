@@ -104,6 +104,9 @@ export default function Home() {
                     }}
                     className="bg-input/50 border-border/50"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Use: <code className="px-1.5 py-0.5 rounded bg-muted font-mono text-xs select-all cursor-pointer">https://bitespeed-wzio.onrender.com/identify</code>
+                  </p>
                 </div>
                 <Button
                   onClick={() => handleSetEndpoint(apiEndpoint)}
