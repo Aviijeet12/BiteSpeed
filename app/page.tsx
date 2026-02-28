@@ -112,8 +112,7 @@ export default function Home() {
                   onClick={() => handleSetEndpoint(apiEndpoint)}
                   disabled={!apiEndpoint}
                   variant="outline"
-                  className="w-full border-border/50"
-                  size="lg"
+                  className="w-full border-border/50 text-sm"
                 >
                   Connect API
                 </Button>
