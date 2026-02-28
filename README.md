@@ -2,7 +2,6 @@
 
 A full-stack application for **contact identity reconciliation** — linking and consolidating customer contacts across multiple purchases using email addresses and phone numbers.
 
-Built as a solution for the [Bitespeed Backend Task](https://bitespeed.notion.site/Bitespeed-Backend-Task-Identity-Reconciliation-53392ab16fe249b28050571f1d1fc2d4).
 
 ## Live Demo
 
