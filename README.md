@@ -4,10 +4,21 @@ A full-stack application for **contact identity reconciliation** — linking and
 
 Built as a solution for the [Bitespeed Backend Task](https://bitespeed.notion.site/Bitespeed-Backend-Task-Identity-Reconciliation-53392ab16fe249b28050571f1d1fc2d4).
 
+## Live Demo
+
+| Service  | URL                                                    |
+| -------- | ------------------------------------------------------ |
+| Frontend | [https://bite-speed-roan.vercel.app](https://bite-speed-roan.vercel.app) |
+| Backend  | [https://bitespeed-wzio.onrender.com](https://bitespeed-wzio.onrender.com) |
+| API      | `POST https://bitespeed-wzio.onrender.com/identify`    |
+
+> **Note:** The Render free tier spins down after inactivity. The first request may take ~30 seconds while the server wakes up.
+
 ---
 
 ## Table of Contents
 
+- [Live Demo](#live-demo)
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
@@ -19,6 +30,7 @@ Built as a solution for the [Bitespeed Backend Task](https://bitespeed.notion.si
   - [POST /identify](#post-identify)
 - [Database Schema](#database-schema)
 - [How It Works](#how-it-works)
+- [Deployment](#deployment)
 - [Project Structure](#project-structure)
 - [Environment Variables](#environment-variables)
 
@@ -40,31 +52,32 @@ Customers can use different email addresses and phone numbers across purchases. 
 ## Architecture
 
 ```
-┌──────────────────┐        POST /identify        ┌──────────────────┐
-│                  │  ──────────────────────────▶  │                  │
-│   Frontend       │                               │   Backend        │
-│   (Next.js)      │  ◀──────────────────────────  │   (Express)      │
-│   Port 3000      │        JSON response          │   Port 3001      │
-│                  │                               │                  │
-└──────────────────┘                               └────────┬─────────┘
-                                                            │
-                                                            ▼
-                                                   ┌──────────────────┐
-                                                   │   SQLite / SQL   │
-                                                   │   Database       │
-                                                   └──────────────────┘
+┌──────────────────────────┐     POST /identify     ┌──────────────────────────┐
+│                          │  ────────────────────▶  │                          │
+│   Frontend (Vercel)      │                         │   Backend (Render)       │
+│   Next.js + React        │  ◀────────────────────  │   Express + Sequelize    │
+│                          │     JSON response       │                          │
+│  bite-speed-roan.vercel  │                         │  bitespeed-wzio.onrender │
+└──────────────────────────┘                         └────────────┬─────────────┘
+                                                                  │
+                                                                  ▼
+                                                     ┌──────────────────────────┐
+                                                     │   PostgreSQL (Render)    │
+                                                     │   bitespeed_psql         │
+                                                     └──────────────────────────┘
 ```
 
 ---
 
 ## Tech Stack
 
-| Layer    | Technology                                         |
-| -------- | -------------------------------------------------- |
-| Frontend | Next.js, React, TypeScript, Tailwind CSS, shadcn/ui |
-| Backend  | Node.js, Express, TypeScript                       |
-| ORM      | Sequelize                                          |
-| Database | SQLite (default) — swappable to PostgreSQL / MySQL |
+| Layer      | Technology                                          |
+| ---------- | --------------------------------------------------- |
+| Frontend   | Next.js, React, TypeScript, Tailwind CSS, shadcn/ui |
+| Backend    | Node.js, Express, TypeScript                        |
+| ORM        | Sequelize                                           |
+| Database   | PostgreSQL (production) / SQLite (local dev)        |
+| Hosting    | Vercel (frontend) + Render (backend + database)     |
 
 ---
 
@@ -110,6 +123,27 @@ pnpm dev
 ```
 
 Then open [http://localhost:3000](http://localhost:3000) in your browser, enter `http://localhost:3001/identify` as the API endpoint, and start testing.
+
+---
+
+## Deployment
+
+### Frontend — Vercel
+
+1. Import the repo on [vercel.com](https://vercel.com) → connect `Aviijeet12/BiteSpeed`
+2. Set **Root Directory** to `.` (repo root)
+3. Vercel auto-detects Next.js — deploy with defaults
+
+### Backend — Render
+
+1. Create a **PostgreSQL** database on [render.com](https://render.com) (free tier)
+2. Create a **Web Service** → connect `Aviijeet12/BiteSpeed`
+3. Configure:
+   - **Root Directory:** `backend`
+   - **Build Command:** `npm install && npm run build`
+   - **Start Command:** `npm start`
+4. Set environment variables (see [Environment Variables](#environment-variables))
+5. Deploy — the backend auto-syncs the database schema on startup
 
 ---
 
@@ -262,6 +296,18 @@ BiteSpeed/
 | `DB_PASSWORD`  | –                    | Database password (non-SQLite)  |
 
 Copy `backend/.env.example` to `backend/.env` and adjust as needed.
+
+### Production (Render) Environment Variables
+
+| Key            | Value                                |
+| -------------- | ------------------------------------ |
+| `PORT`         | `3001`                               |
+| `DB_DIALECT`   | `postgres`                           |
+| `DB_HOST`      | `dpg-d6hbcpnkijhs73fdgbog-a`        |
+| `DB_PORT`      | `5432`                               |
+| `DB_NAME`      | `bitespeed_psql`                     |
+| `DB_USER`      | `bitespeed_psql_user`                |
+| `DB_PASSWORD`  | *(set from Render dashboard)*        |
 
 ---
 
