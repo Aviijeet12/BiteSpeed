@@ -19,7 +19,7 @@ interface ContactResponse {
 }
 
 export default function Home() {
-  const [apiEndpoint, setApiEndpoint] = useState('')
+  const [apiEndpoint, setApiEndpoint] = useState('https://bitespeed-wzio.onrender.com/identify')
   const [showForm, setShowForm] = useState(false)
   const [result, setResult] = useState<ContactResponse | null>(null)
   const [loading, setLoading] = useState(false)
