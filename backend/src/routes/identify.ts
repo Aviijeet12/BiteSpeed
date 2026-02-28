@@ -1,0 +1,29 @@
+import { Router, Request, Response } from "express";
+import { identify } from "../services/identifyService";
+
+const router = Router();
+
+router.post("/", async (req: Request, res: Response) => {
+  try {
+    const { email, phoneNumber } = req.body;
+
+    // At least one of email or phoneNumber must be provided
+    if (!email && !phoneNumber) {
+      return res.status(400).json({
+        error: "At least one of email or phoneNumber is required",
+      });
+    }
+
+    const result = await identify(
+      email || null,
+      phoneNumber || null
+    );
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in /identify:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+export default router;
